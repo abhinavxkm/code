@@ -1,0 +1,85 @@
+﻿@model EasyHousingSolution.Models.PropertyViewModel
+
+@{
+    ViewData["Title"] = "Edit Property";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Edit Property</h2>
+    <hr />
+
+    <form asp-action="EditProperty" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="PropertyId" />
+
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Property Details Form -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header">
+                        <h5>Property Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Form fields go here -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PropertyName" class="form-label"></label>
+                                <input asp-for="PropertyName" class="form-control" />
+                                <span asp-validation-for="PropertyName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PropertyType" class="form-label"></label>
+                                <input asp-for="PropertyType" class="form-control" />
+                                <span asp-validation-for="PropertyType" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label"></label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <!-- ... other fields ... -->
+                        <div class="form-group mb-3">
+                            <label asp-for="NewImages" class="form-label">Upload New Images</label>
+                            <input asp-for="NewImages" type="file" multiple class="form-control" />
+                            <span asp-validation-for="NewImages" class="text-danger"></span>
+                            <small class="form-text text-muted">You can select multiple files. Total images cannot exceed 6.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Existing Images Management -->
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5>Manage Existing Images (@Model.ExistingImages.Count)</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (!Model.ExistingImages.Any())
+                        {
+                            <p class="text-muted">No images have been uploaded yet.</p>
+                        }
+                        else
+                        {
+                            <div class="row g-2">
+                                @foreach (var image in Model.ExistingImages)
+                                {
+                                    <div class="col-6 position-relative">
+                                        <img src="@Url.Action("Get", "Image", new { id = image.ImageId })" class="img-fluid rounded" />
+                                        @* Add a delete button for each image if you implement that feature *@
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <button type="submit" class="btn btn-primary">Update and Resubmit</button>
+        <a asp-action="Dashboard" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
